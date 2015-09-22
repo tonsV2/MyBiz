@@ -18,6 +18,24 @@ public class Expense {
 	private double price;
 	private int amount = 1;
 
+	public Expense() {
+	}
+
+	public Expense(final String name, final String description, final double price, final int amount) {
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.amount = amount;
+	}
+
+	public Expense(final long id, final String name, final String description, final double price, final int amount) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.amount = amount;
+	}
+
 	public long getId() {
 		return id;
 	}
