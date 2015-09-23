@@ -16,6 +16,11 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService service;
 
+	@RequestMapping("/expense")
+	public List<Expense> findAll() {
+		return service.findAll();
+	}
+
 	@RequestMapping(value = "/expense", method = RequestMethod.POST)
 	public Expense save(@RequestBody Expense expense) {
 		return service.save(expense);
@@ -23,16 +28,21 @@ public class ExpenseController {
 
 	@RequestMapping("/expense/{id}")
 	public ResponseEntity<?> findOne(@PathVariable long id) {
-		final Expense one = service.findOne(id);
-		if(one != null) {
-			return new ResponseEntity<>(one, HttpStatus.OK);
+		final Expense expense = service.findOne(id);
+		if(expense != null) {
+			return new ResponseEntity<>(expense, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping("/expense")
-	public List<Expense> findAll() {
-		return service.findAll();
+	@RequestMapping(value = "/expense", method = RequestMethod.PUT)
+	public Expense update(@RequestBody Expense expense) {
+		return service.save(expense);
+	}
+
+	@RequestMapping(value = "/expense/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable long id) {
+		service.delete(id);
 	}
 }

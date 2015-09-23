@@ -24,4 +24,8 @@ public class ExpenseService {
 	public List<Expense> findAll() {
 		return repository.findAll();
 	}
+
+	public void delete(final long id) {
+		repository.delete(id);
+	}
 }
