@@ -23,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class ExpenseControllerTest {
+	private final ObjectMapper objectMapper = new ObjectMapper();
+
 	@Autowired
 	private ExpenseController controller;
 
@@ -43,9 +45,7 @@ public class ExpenseControllerTest {
 	@Test
 	public void postExpense() throws Exception {
 		final Expense expense = createExpense();
-
-		final ObjectMapper mapper = new ObjectMapper();
-		final String json = mapper.writeValueAsString(expense);
+		final String json = objectMapper.writeValueAsString(expense);
 
 		mvc.perform(post("/api/expense").contentType(MediaType.APPLICATION_JSON).content(json))
 				.andExpect(status().isOk())
@@ -56,9 +56,7 @@ public class ExpenseControllerTest {
 	public void getExpense() throws Exception {
 		// Given
 		final Expense expense = createExpense();
-
-		final ObjectMapper mapper = new ObjectMapper();
-		final String json = mapper.writeValueAsString(expense);
+		final String json = objectMapper.writeValueAsString(expense);
 
 		mvc.perform(MockMvcRequestBuilders.get("/api/expense/1").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -66,11 +64,34 @@ public class ExpenseControllerTest {
 	}
 
 	@Test
+	public void updateExpense() throws Exception {
+		// Given
+		final Expense expense = createExpense();
+		expense.setName("Updated " + expense.getName());
+		final String json = objectMapper.writeValueAsString(expense);
+
+		mvc.perform(MockMvcRequestBuilders.put("/api/expense").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().string(equalTo(json)));
+
+//		mvc.perform(MockMvcRequestBuilders.get("/api/expense/1").accept(MediaType.APPLICATION_JSON))
+////				.andExpect(status().isOk())
+//				.andExpect(content().string(equalTo(json)));
+	}
+
+	@Test
 	public void getExpenses() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/api/expense").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
 // TODO: Assert content
-//				.andExpect(content().string(equalTo("[]")));
+				.andExpect(content().string(equalTo("[]")));
+	}
+
+	@Test
+	public void deleteExpense() throws Exception {
+		postExpense();
+		mvc.perform(MockMvcRequestBuilders.delete("/api/expense/1").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
 
 	private Expense createExpense() {
