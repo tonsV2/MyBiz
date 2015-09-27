@@ -17,6 +17,7 @@ public class Expense {
 	private String description;
 	private double price;
 	private int amount = 1;
+	// TODO: add date field
 
 	public Expense() {
 	}
