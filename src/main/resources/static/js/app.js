@@ -17,19 +17,19 @@
 
 		$stateProvider.state('expenses', { // state for showing all expenses
 			url: '/expenses',
-			templateUrl: 'partials/expenses.html',
+			templateUrl: 'partials/expense/expenses.html',
 			controller: 'ExpenseListController'
 		}).state('viewExpense', { //state for showing single expense
 			url: '/expenses/:id/view',
-			templateUrl: 'partials/expense-view.html',
+			templateUrl: 'partials/expense/expense-view.html',
 			controller: 'ExpenseViewController'
 		}).state('newExpense', { //state for adding a new expense
 			url: '/expenses/new',
-			templateUrl: 'partials/expense-add.html',
+			templateUrl: 'partials/expense/expense-add.html',
 			controller: 'ExpenseCreateController'
 		}).state('editExpense', { //state for updating a expense
 			url: '/expenses/:id/edit',
-			templateUrl: 'partials/expense-edit.html',
+			templateUrl: 'partials/expense/expense-edit.html',
 			controller: 'ExpenseEditController'
 		});
 	}).run(function($state) {
