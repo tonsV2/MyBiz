@@ -3,6 +3,18 @@
 	var app = angular.module('myApp', ['ui.router', 'ngResource', 'myApp.controllers', 'myApp.services']);
 
 	app.config(function($stateProvider) {
+		$stateProvider.state('dashboard', {
+			url: '/dashboard',
+			templateUrl: 'partials/dashboard.html',
+			controller: 'DashboardController'
+		});
+
+		$stateProvider.state('income', {
+			url: '/income',
+			templateUrl: 'partials/incomes.html',
+			controller: 'IncomeController'
+		});
+
 		$stateProvider.state('expenses', { // state for showing all expenses
 			url: '/expenses',
 			templateUrl: 'partials/expenses.html',

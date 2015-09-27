@@ -1,6 +1,12 @@
 (function(angular) {
 	var app = angular.module('myApp.controllers', []);
 
+	app.controller('DashboardController', function($scope, $state, $window, Expense) {
+	});
+
+	app.controller('IncomeController', function($scope, $state, $window, Expense) {
+	});
+
 	app.controller('ExpenseListController', function($scope, $state, $window, Expense) {
 		$scope.expenses = Expense.query(); //fetch all expenses. Issues a GET to /api/expenses
 
