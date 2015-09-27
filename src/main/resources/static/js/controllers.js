@@ -1,16 +1,15 @@
 (function(angular) {
 	var app = angular.module('myApp.controllers', []);
 
-//	app.controller('ExpenseListController', function($scope, $state, popupService, $window, Expense) {
 	app.controller('ExpenseListController', function($scope, $state, $window, Expense) {
 		$scope.expenses = Expense.query(); //fetch all expenses. Issues a GET to /api/expenses
 
 		$scope.deleteExpense = function(expense) { // Delete a expense. Issues a DELETE to /api/expenses/:id
-//			if (popupService.showPopup('Really delete this?')) {
+			if ($window.confirm('Really delete this?')) {
 				expense.$delete(function() {
 					$window.location.href = ''; //redirect to home
 				});
-//			}
+			}
 		};
 	});
 
