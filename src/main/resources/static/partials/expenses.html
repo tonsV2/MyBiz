@@ -1,0 +1,17 @@
+<a ui-sref="newExpense" class="btn-primary btn-lg nodecoration">Add New Expense</a>
+
+<table class="table">
+	<tr>
+		<td>
+			<h3>All Expenses</h3>
+		</td>
+		<td></td>
+	</tr>
+	<tr ng-repeat="expense in expenses">
+		<td>{{expense.name}}</td>
+		<td>
+			<a class="btn btn-primary" ui-sref="viewExpense({id:expense.id})">View</a>
+			<a class="btn btn-danger"  ng-click="deleteExpense(expense)">Delete</a>
+		</td>
+	</tr>
+</table>

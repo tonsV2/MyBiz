@@ -2,14 +2,14 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Hello AngularJS</title>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-resource.min.js"></script>
-		<script src="js/expense.js"></script>
 	</head>
 	<body>
-		<div ng-controller="Expense">
-			<p>Id: {{data.id}}</p>
-			<p>Content: {{data.name}}</p>
-		</div>
+		<div ui-view></div>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-resource.min.js"></script>
+		<script type="text/javascript" src="lib/angular-ui-router.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/controllers.js"></script>
+		<script type="text/javascript" src="js/services.js"></script>
 	</body>
 </html>

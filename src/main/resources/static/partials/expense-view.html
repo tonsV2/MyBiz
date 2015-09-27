@@ -1,0 +1,25 @@
+<table class="table expensetable">
+	<tr>
+		<td><h3>Details for {{expense.name}}</h3></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Expense name</td>
+		<td>{{expense.name}}</td>
+	</tr>
+	<tr>
+		<td>Description</td>
+		<td>{{expense.description}}</td>
+	</tr>
+	<tr>
+		<td>Price</td>
+		<td>{{expense.price}}</td>
+	</tr>
+	<tr>
+		<td>Amount</td>
+		<td>{{expense.amount}}</td>
+	</tr>
+</table>
+<div>
+	<a class="btn btn-primary" ui-sref="editExpense({id:expense.id})">Edit</a>
+</div>
