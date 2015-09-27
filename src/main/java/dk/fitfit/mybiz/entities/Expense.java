@@ -6,6 +6,7 @@ import dk.fitfit.mybiz.Settings;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Expense {
@@ -17,24 +18,26 @@ public class Expense {
 	private String description;
 	private double price;
 	private int amount = 1;
-	// TODO: add date field
+	private Date date;
 
 	public Expense() {
 	}
 
-	public Expense(final String name, final String description, final double price, final int amount) {
+	public Expense(final String name, final String description, final double price, final int amount, final Date date) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.amount = amount;
+		this.date = date;
 	}
 
-	public Expense(final long id, final String name, final String description, final double price, final int amount) {
+	public Expense(final long id, final String name, final String description, final double price, final int amount, final Date date) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.amount = amount;
+		this.date = date;
 	}
 
 	public long getId() {
@@ -79,5 +82,13 @@ public class Expense {
 
 	public void setAmount(final int amount) {
 		this.amount = amount;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

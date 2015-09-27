@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,12 +28,14 @@ public class ExpenseServiceTest {
 		final String description = "expense description";
 		final double price = 1200.0;
 		final int amount = 2;
+		final Date date = new Date();
 
 		final Expense expense = new Expense();
 		expense.setName(name);
 		expense.setDescription(description);
 		expense.setPrice(price);
 		expense.setAmount(amount);
+		expense.setDate(date);
 
 		// When
 		final Expense savedExpense = service.save(expense);
@@ -42,5 +46,6 @@ public class ExpenseServiceTest {
 		assertThat(savedExpense.getDescription(), is(description));
 		assertThat(expense.getPrice(), is(price));
 		assertThat(expense.getTotalPrice(), is(3000.0));
+		assertThat(expense.getDate(), is(date));
 	}
 }

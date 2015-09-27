@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Date;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -100,8 +102,9 @@ public class ExpenseControllerTest {
 		final String description = "expense description";
 		final double price = 1200.0;
 		final int amount = 2;
+		final Date date = new Date();
 
-		return new Expense(id, name, description, price, amount);
+		return new Expense(id, name, description, price, amount, date);
 	}
 
 }
