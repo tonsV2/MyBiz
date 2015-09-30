@@ -20,7 +20,7 @@ public class ExpenseRepositoryTest {
 	private ExpenseRepository repository;
 
 	@Test
-	public void testExpenseRepository() {
+	public void testExpenseRepositorySave() {
 		// Given
 		final String name = "expense name";
 		final String description = "expense description";
