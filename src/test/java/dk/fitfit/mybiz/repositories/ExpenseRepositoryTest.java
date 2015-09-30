@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,4 +44,20 @@ public class ExpenseRepositoryTest {
 		assertThat(expense.getPrice(), is(price));
 		assertThat(expense.getTotalPrice(), is(3000.0));
 	}
+
+	@Test
+	public void testExpenseRepositoryFindOne() {
+		fail();
+	}
+
+	@Test
+	public void testExpenseRepositoryFindAll() {
+		fail();
+	}
+
+	@Test
+	public void testExpenseRepositoryDelete() {
+		fail();
+	}
+
 }
