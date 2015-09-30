@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.List;
 
 
 @RestController
@@ -16,7 +15,7 @@ public class DataInitializerController {
 	private ExpenseService service;
 
 	@RequestMapping("/initialize")
-	public List<Expense> initialize() {
+	public Iterable<Expense> initialize() {
 		final long id = 1L;
 		final String name = "expense name";
 		final String description = "expense description";

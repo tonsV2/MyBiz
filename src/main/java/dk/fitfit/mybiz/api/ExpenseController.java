@@ -5,11 +5,10 @@ import dk.fitfit.mybiz.services.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -21,7 +20,7 @@ public class ExpenseController {
 	private ExpenseService service;
 
 	@RequestMapping("/expense")
-	public List<Expense> findAll() {
+	public Iterable<Expense> findAll() {
 		log.info("findAll()");
 		return service.findAll();
 	}
@@ -50,8 +49,13 @@ public class ExpenseController {
 	}
 
 	@RequestMapping(value = "/expense/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable long id) {
+	public ResponseEntity<Object> delete(@PathVariable long id) {
 		log.info("delete({})", id);
-		service.delete(id);
+		try {
+			service.delete(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (EmptyResultDataAccessException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 }

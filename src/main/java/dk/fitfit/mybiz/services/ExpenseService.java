@@ -6,8 +6,6 @@ import dk.fitfit.mybiz.repositories.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ExpenseService {
 	@Autowired
@@ -21,7 +19,7 @@ public class ExpenseService {
 		return repository.findOne(id);
 	}
 
-	public List<Expense> findAll() {
+	public Iterable<Expense> findAll() {
 		return repository.findAll();
 	}
 
