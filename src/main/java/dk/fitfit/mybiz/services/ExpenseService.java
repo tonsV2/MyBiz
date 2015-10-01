@@ -4,6 +4,7 @@ package dk.fitfit.mybiz.services;
 import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.repositories.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +24,12 @@ public class ExpenseService {
 		return repository.findAll();
 	}
 
-	public void delete(final long id) {
-		repository.delete(id);
+	public boolean delete(final long id) {
+		try {
+			repository.delete(id);
+			return true;
+		} catch (EmptyResultDataAccessException e) {
+			return false;
+		}
 	}
 }
