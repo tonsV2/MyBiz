@@ -41,8 +41,7 @@ public class ExpenseRepositoryTest {
 		assertThat(savedExpense.getId(), is(notNullValue()));
 		assertThat(savedExpense.getName(), is(name));
 		assertThat(savedExpense.getDescription(), is(description));
-		assertThat(expense.getPrice(), is(price));
-		assertThat(expense.getTotalPrice(), is(3000.0));
+		assertThat(savedExpense.getPrice(), is(price));
 	}
 
 	@Test
