@@ -1,110 +1,162 @@
 package dk.fitfit.mybiz.api;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import dk.fitfit.mybiz.Application;
 import dk.fitfit.mybiz.entities.Expense;
+import dk.fitfit.mybiz.services.ExpenseService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Date;
+import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class ExpenseControllerTest {
-	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	@Autowired
+	@Mock
+	private ExpenseService service;
+
+	@InjectMocks
 	private ExpenseController controller;
 
 	private MockMvc mvc;
 
 	@Before
 	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
 		mvc = MockMvcBuilders.standaloneSetup(controller).build();
-
 	}
 
 	@Test
 	public void testNotFoundExpense() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/api/expense/666").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound());
+		// Given
+		when(service.findOne(isA(Long.class))).thenReturn(null);
+
+		// When
+		final ResultActions result = mvc.perform(get("/api/expense/666").
+				accept(MediaType.APPLICATION_JSON));
+
+		// Then
+		result.andExpect(status().isNotFound());
+		verify(service).findOne(anyLong());
 	}
 
 	@Test
 	public void postExpense() throws Exception {
-		final Expense expense = createExpense();
-		final String json = objectMapper.writeValueAsString(expense);
+		// Given
+		final Expense expense = new Expense();
 
-		mvc.perform(post("/api/expense").contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo(json)));
+		// When
+		when(service.save(isA(Expense.class))).thenReturn(expense);
+		final ResultActions result = mvc.perform(post("/api/expense")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(expense)));
+
+		// Then
+		result.andExpect(status().isOk())
+				.andExpect(content().string(toJson(expense)));
+		verify(service).save(isA(Expense.class));
 	}
 
 	@Test
 	public void getExpense() throws Exception {
 		// Given
-		final Expense expense = createExpense();
-		final String json = objectMapper.writeValueAsString(expense);
+		final Expense expense = new Expense();
 
-		mvc.perform(MockMvcRequestBuilders.get("/api/expense/1").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo(json)));
+		// When
+		when(service.findOne(isA(Long.class))).thenReturn(expense);
+		final ResultActions result = mvc.perform(get("/api/expense/1")
+				.accept(MediaType.APPLICATION_JSON));
+
+		// Then
+		result.andExpect(status().isOk())
+				.andExpect(content().string(toJson(expense)));
+		verify(service).findOne(anyLong());
 	}
 
 	@Test
 	public void updateExpense() throws Exception {
 		// Given
-		final Expense expense = createExpense();
-		expense.setName("Updated " + expense.getName());
-		final String json = objectMapper.writeValueAsString(expense);
+		final long id = 1L;
+		final Expense inputExpense = new Expense();
+		inputExpense.setId(id);
 
-		mvc.perform(MockMvcRequestBuilders.put("/api/expense").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo(json)));
+		final Expense outputExpense = new Expense();
+		outputExpense.setId(id);
+		outputExpense.setName("Updated " + inputExpense.getName());
 
-//		mvc.perform(MockMvcRequestBuilders.get("/api/expense/1").accept(MediaType.APPLICATION_JSON))
-////				.andExpect(status().isOk())
-//				.andExpect(content().string(equalTo(json)));
+		// When
+		when(service.save(inputExpense)).thenReturn(outputExpense);
+
+		final ResultActions result = mvc.perform(put("/api/expense")
+				.content(toJson(inputExpense))
+				.accept(MediaType.APPLICATION_JSON));
+
+		// Then
+//		result.andExpect(status().isOk())
+		result.andExpect(content().string(toJson(outputExpense)));
+		verify(service).save(isA(Expense.class));
 	}
 
 	@Test
 	public void getExpenses() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/api/expense").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-// TODO: Assert content
-				.andExpect(content().string(equalTo("[]")));
+		// Given
+		final Expense expense1 = new Expense();
+		final Expense expense2 = new Expense();
+		final ArrayList<Expense> expenses = Lists.newArrayList(expense1, expense2);
+
+		when(service.findAll()).thenReturn(expenses);
+
+		// When
+		final ResultActions result = mvc.perform(get("/api/expense").accept(MediaType.APPLICATION_JSON));
+
+		// Then
+		result.andExpect(status().isOk())
+				.andExpect(content().string(toJson(expenses)));
+		verify(service).findAll();
 	}
 
 	@Test
 	public void deleteExpense() throws Exception {
-		postExpense();
-		mvc.perform(MockMvcRequestBuilders.delete("/api/expense/1").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+		// Given
+		final long id = 1L;
+		when(service.delete(isA(Long.class))).thenReturn(true);
+
+		// When
+		final ResultActions result = mvc.perform(delete("/api/expense/1")
+				.accept(MediaType.APPLICATION_JSON));
+
+		// Then
+		result.andExpect(status().isOk());
+		verify(service).delete(anyLong());
 	}
 
-	private Expense createExpense() {
-		final long id = 1L;
-		final String name = "expense name";
-		final String description = "expense description";
-		final double price = 1200.0;
-		final int amount = 2;
-		final Date date = new Date();
-
-		return new Expense(id, name, description, price, amount, date);
+	private String toJson(final Object object) {
+		final ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return objectMapper.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
