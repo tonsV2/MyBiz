@@ -41,9 +41,10 @@ public class ExpenseController {
 		}
 	}
 
-	@RequestMapping(value = "/expense", method = RequestMethod.PUT)
-	public Expense update(@RequestBody Expense expense) {
+	@RequestMapping(value = "/expense/{id}", method = RequestMethod.PUT)
+	public Expense update(@RequestBody Expense expense, @PathVariable long id) {
 		log.info("update({})", expense.toString());
+		expense.setId(id);
 		return service.save(expense);
 	}
 

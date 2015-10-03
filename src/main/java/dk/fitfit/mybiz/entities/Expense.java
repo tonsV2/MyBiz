@@ -16,7 +16,6 @@ public class Expense {
 	@Id
 	@GeneratedValue
 	private long id;
-
 	private String name;
 	private String description;
 	private double price;
@@ -76,7 +75,7 @@ public class Expense {
 	}
 
 	public double getTotalPriceIncludingVat() {
-		return price * Settings.VAT * amount;
+		return Settings.VAT * getTotalPrice();
 	}
 
 	public void setPrice(final double price) {
