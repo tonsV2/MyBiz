@@ -6,6 +6,9 @@ import dk.fitfit.mybiz.Settings;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -18,12 +21,12 @@ public class Expense {
 	private String description;
 	private double price;
 	private int amount = 1;
-	private Date date;
+	private LocalDate date;
 
 	public Expense() {
 	}
 
-	public Expense(final String name, final String description, final double price, final int amount, final Date date) {
+	public Expense(final String name, final String description, final double price, final int amount, final LocalDate date) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -31,7 +34,7 @@ public class Expense {
 		this.date = date;
 	}
 
-	public Expense(final long id, final String name, final String description, final double price, final int amount, final Date date) {
+	public Expense(final long id, final String name, final String description, final double price, final int amount, final LocalDate date) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -69,6 +72,10 @@ public class Expense {
 	}
 
 	public double getTotalPrice() {
+		return price * amount;
+	}
+
+	public double getTotalPriceIncludingVat() {
 		return price * Settings.VAT * amount;
 	}
 
@@ -84,11 +91,28 @@ public class Expense {
 		this.amount = amount;
 	}
 
-	public Date getDate() {
+	public LocalDate getLocalDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public Date getDate() {
+		return toDate(getLocalDate());
+	}
+
+	public void setDate(final Date date) {
+		this.date = toLocalDate(date);
+	}
+
+	public void setLocalDate(final LocalDate date) {
 		this.date = date;
+	}
+
+	private LocalDate toLocalDate(final Date date) {
+		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	private Date toDate(final LocalDate localDate) {
+		final Instant instant = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
 	}
 }
