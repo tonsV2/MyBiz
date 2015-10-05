@@ -1,7 +1,12 @@
 (function(angular) {
 	var app = angular.module('myApp.controllers', []);
 
-	app.controller('DashboardController', function($scope, $state, $window, Expense) {
+	app.controller('DashboardController', function($scope, ExpenseTotal) {
+		$scope.updateTotalExpenses = function() {
+			ExpenseTotal.get({ q: $scope.selectedItem }, function(total) {
+				$scope.totalExpenses = total;
+			});
+		}
 	});
 
 	app.controller('IncomeController', function($scope, $state, $window, Expense) {

@@ -57,4 +57,13 @@ public class ExpenseController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+// TODO: Update client side service to send a url including path variable
+//	@RequestMapping(value = "/expense/quarter/{q}")
+//	public double totalByQuarter(@PathVariable int q) {
+	@RequestMapping(value = "/expense/quarter")
+	public double totalByQuarter(@RequestParam int q) {
+		log.info("totalByQuarter({})", q);
+		return service.totalPrice(q);
+	}
 }

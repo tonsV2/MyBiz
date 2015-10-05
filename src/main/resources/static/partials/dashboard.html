@@ -1,1 +1,10 @@
 <div>Dashboard!</div>
+<label>Select quarter:
+	<select ng-model="selectedItem" ng-change="updateTotalExpenses()">
+		<option value="1">1st Quarter</option>
+		<option value="2">2nd Quarter</option>
+		<option value="3">3rd Quarter</option>
+		<option value="4">4th Quarter</option>
+	</select>
+</label>
+<div>Total expenses: {{totalExpenses}}</div>
