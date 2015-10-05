@@ -1,11 +1,17 @@
 (function(angular) {
+	'use strict';
 	var app = angular.module('myApp.controllers', []);
 
 	app.controller('DashboardController', function($scope, ExpenseTotal) {
 		$scope.updateTotalExpenses = function() {
-			ExpenseTotal.get({ q: $scope.selectedItem }, function(total) {
-				$scope.totalExpenses = total;
+			ExpenseTotal.get({ q: $scope.selectedItem }).$promise.then(function(result) {
+				$scope.totalExpenses = result;
+				console.log(result);
 			});
+//			ExpenseTotal.get({ q: $scope.selectedItem }, function(total) {
+//				$scope.totalExpenses = total;
+//			});
+//			$scope.totalExpenses = ExpenseTotal.get({ q: $scope.selectedItem });
 		}
 	});
 

@@ -1,4 +1,5 @@
 (function(angular) {
+	'use strict';
 	var app = angular.module('myApp.services', []);
 
 	app.factory('Expense', function($resource) {
@@ -10,7 +11,7 @@
 	});
 
 	app.factory('ExpenseTotal', function($resource) {
-		return $resource('api/expense/quarter/:q', {q: '@q'});
+		return $resource('api/expense/quarter/:q', { q: '@q' });
 	});
 
 })(angular);
