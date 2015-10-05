@@ -58,11 +58,6 @@
 			<version>18.0</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-exec</artifactId>
-			<version>0.14.0.2.2.0.0-2041</version>
-		</dependency>
 	</dependencies>
 
 	<parent>
