@@ -1,6 +1,8 @@
 package dk.fitfit.mybiz.entities;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dk.fitfit.mybiz.Settings;
 
 import javax.persistence.Entity;
@@ -20,6 +22,8 @@ public class Expense {
 	private String description;
 	private double price;
 	private int amount = 1;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
 	private LocalDate date;
 
 	public Expense() {
@@ -90,16 +94,28 @@ public class Expense {
 		this.amount = amount;
 	}
 
-	public LocalDate getLocalDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
+	public Date getOldDate() {
+		return toDate(date);
+	}
+
+	public void setDate(final LocalDate date) {
+		this.date = date;
+	}
+/*
 	public Date getDate() {
 		return toDate(getLocalDate());
 	}
 
 	public void setDate(final Date date) {
 		this.date = toLocalDate(date);
+	}
+
+	public LocalDate getLocalDate() {
+		return date;
 	}
 
 	public void setLocalDate(final LocalDate date) {
@@ -109,9 +125,11 @@ public class Expense {
 	private LocalDate toLocalDate(final Date date) {
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
+*/
 
 	private Date toDate(final LocalDate localDate) {
 		final Instant instant = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
 		return Date.from(instant);
 	}
+
 }

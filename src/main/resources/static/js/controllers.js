@@ -41,7 +41,10 @@
 		};
 
 		$scope.loadExpense = function() { //Issues a GET request to /api/expenses/:id to get a expense to update
-			$scope.expense = Expense.get({ id: $stateParams.id });
+			$scope.expense = Expense.get({ id: $stateParams.id }, function() {
+				// JSON doesn't support date types so we have to manually convert our string to a date object.
+				$scope.expense.date = new Date($scope.expense.date);
+			});
 		};
 
 		$scope.loadExpense(); // Load a expense which can be edited on UI
