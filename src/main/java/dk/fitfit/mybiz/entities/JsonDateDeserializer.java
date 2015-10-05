@@ -17,7 +17,7 @@ public class JsonDateDeserializer extends JsonDeserializer<LocalDate> {
 
 	@Override
 	public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
-			throws IOException{
+			throws IOException {
 
 		ObjectCodec oc = jp.getCodec();
 		TextNode node = oc.readTree(jp);
@@ -25,6 +25,6 @@ public class JsonDateDeserializer extends JsonDeserializer<LocalDate> {
 
 		Instant instant = Instant.parse(dateString);
 		LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-		return LocalDate.of(dateTime.getYear(), dateTime.getMonth(), dateTime.getDayOfMonth());
+		return dateTime.toLocalDate();
 	}
 }

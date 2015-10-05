@@ -11,7 +11,7 @@
 		$scope.expenses = Expense.query(); //fetch all expenses. Issues a GET to /api/expenses
 
 		$scope.deleteExpense = function(expense) { // Delete a expense. Issues a DELETE to /api/expenses/:id
-			if ($window.confirm('Really delete this?')) {
+			if ($window.confirm("Really delete '" + expense.name + "'?")) {
 				expense.$delete(function() {
 					$window.location.href = ''; //redirect to home
 				});
