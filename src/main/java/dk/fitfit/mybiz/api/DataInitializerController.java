@@ -3,19 +3,19 @@ package dk.fitfit.mybiz.api;
 import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.services.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
 
-@RestController
+@Controller
 public class DataInitializerController {
 	@Autowired
 	private ExpenseService service;
 
 	@RequestMapping("/initialize")
-	public Iterable<Expense> initialize() {
+	public String initialize() {
 		final long id = 1L;
 		final String name = "expense name";
 		final String description = "expense description";
@@ -29,7 +29,7 @@ public class DataInitializerController {
 		final Expense expense2 = new Expense(id + 1, "Other " + name, description, price * 2, amount * 2, date);
 		service.save(expense2);
 
-		return service.findAll();
+		return "redirect:#/expenses";
 	}
 
 }
