@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+// Credits goes to http://blog.chris-ritchie.com/2014/09/localdate-java-8-custom-serializer.html
 public class JsonDateSerializer extends JsonSerializer<LocalDate> {
 
 	@Override
