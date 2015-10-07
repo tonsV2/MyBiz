@@ -1,6 +1,8 @@
 package dk.fitfit.mybiz.api;
 
+import dk.fitfit.mybiz.assembler.ExpenseResourceAssembler;
 import dk.fitfit.mybiz.entities.Expense;
+import dk.fitfit.mybiz.resource.ExpenseResource;
 import dk.fitfit.mybiz.services.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,8 @@ public class ExpenseController {
 		log.info("findOne({})", id);
 		final Expense expense = service.findOne(id);
 		if(expense != null) {
-			return new ResponseEntity<>(expense, HttpStatus.OK);
+			final ExpenseResource resource = ExpenseResourceAssembler.from(expense);
+			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

@@ -1,8 +1,6 @@
 package dk.fitfit.mybiz.entities;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dk.fitfit.mybiz.Settings;
 
 import javax.persistence.Entity;
@@ -19,8 +17,6 @@ public class Expense {
 	private String description;
 	private double price;
 	private int amount = 1;
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	@JsonSerialize(using = JsonDateSerializer.class)
 	private LocalDate date;
 
 	public Expense() {
