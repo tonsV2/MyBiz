@@ -101,13 +101,14 @@ public class ExpenseServiceTest {
 		assertThat(service.findAll(), hasItems(expense1, expense2));
 	}
 
+// TODO: Expect and then mock the repository to throw the same exception... bad idea?
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void deleteNonExisting() {
 		// Given
 		final long id = 1L;
 
 		// When
-		doThrow(EmptyResultDataAccessException.class).when(repository).delete(id);
+		doThrow(EmptyResultDataAccessException.class).when(repository).delete(isA(Long.class));
 
 		// Then
 		assertThat(service.delete(id), is(false));
