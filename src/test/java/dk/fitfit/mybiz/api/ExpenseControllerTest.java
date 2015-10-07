@@ -31,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 public class ExpenseControllerTest {
 
+	// TODO: fix name... EXPENSE_ENDPOINT?
+	public static final String API_EXPENSE = "/api/expenses";
 	@Mock
 	private ExpenseService service;
 
@@ -47,33 +49,19 @@ public class ExpenseControllerTest {
 
 	@Test
 	public void testNotFoundExpense() throws Exception {
+		final long id = 666L;
+
 		// Given
 		when(service.findOne(isA(Long.class))).thenReturn(null);
 
 		// When
-		final ResultActions result = mvc.perform(get("/api/expense/666").
+		final String url = String.format("%s/%s", API_EXPENSE, id);
+		final ResultActions result = mvc.perform(get(url).
 				accept(MediaType.APPLICATION_JSON));
 
 		// Then
 		result.andExpect(status().isNotFound());
 		verify(service).findOne(anyLong());
-	}
-
-	@Test
-	public void postExpense() throws Exception {
-		// Given
-		final Expense expense = new Expense();
-
-		// When
-		when(service.save(isA(Expense.class))).thenReturn(expense);
-		final ResultActions result = mvc.perform(post("/api/expense")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(toJson(expense)));
-
-		// Then
-		result.andExpect(status().isOk())
-				.andExpect(content().string(toJson(expense)));
-		verify(service).save(isA(Expense.class));
 	}
 
 	@Test
@@ -83,13 +71,49 @@ public class ExpenseControllerTest {
 
 		// When
 		when(service.findOne(isA(Long.class))).thenReturn(expense);
-		final ResultActions result = mvc.perform(get("/api/expense/1")
+		final String url = String.format("%s/1", API_EXPENSE);
+		final ResultActions result = mvc.perform(get(url)
 				.accept(MediaType.APPLICATION_JSON));
 
 		// Then
 		result.andExpect(status().isOk())
 				.andExpect(content().string(toJson(expense)));
 		verify(service).findOne(anyLong());
+	}
+
+	@Test
+	public void getExpenses() throws Exception {
+		// Given
+		final Expense expense1 = new Expense();
+		final Expense expense2 = new Expense();
+		final ArrayList<Expense> expenses = Lists.newArrayList(expense1, expense2);
+
+		when(service.findAll()).thenReturn(expenses);
+
+		// When
+		final ResultActions result = mvc.perform(get(API_EXPENSE).accept(MediaType.APPLICATION_JSON));
+
+		// Then
+		result.andExpect(status().isOk())
+				.andExpect(content().string(toJson(expenses)));
+		verify(service).findAll();
+	}
+
+	@Test
+	public void postExpense() throws Exception {
+		// Given
+		final Expense expense = new Expense();
+
+		// When
+		when(service.save(isA(Expense.class))).thenReturn(expense);
+		final ResultActions result = mvc.perform(post(API_EXPENSE)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(expense)));
+
+		// Then
+		result.andExpect(status().isOk())
+				.andExpect(content().string(toJson(expense)));
+		verify(service).save(isA(Expense.class));
 	}
 
 	@Test
@@ -104,34 +128,16 @@ public class ExpenseControllerTest {
 		outputExpense.setName("Updated " + inputExpense.getName());
 
 		// When
-		when(service.save(inputExpense)).thenReturn(outputExpense);
+		when(service.save(isA(Expense.class))).thenReturn(outputExpense);
 
-		final ResultActions result = mvc.perform(put("/api/expense")
-				.content(toJson(inputExpense))
-				.accept(MediaType.APPLICATION_JSON));
+		final String url = String.format("%s/%s", API_EXPENSE, id);
+		final ResultActions result = mvc.perform(put(url)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(inputExpense)));
 
-		// Then
-//		result.andExpect(status().isOk())
+		result.andExpect(status().isOk());
 		result.andExpect(content().string(toJson(outputExpense)));
 		verify(service).save(isA(Expense.class));
-	}
-
-	@Test
-	public void getExpenses() throws Exception {
-		// Given
-		final Expense expense1 = new Expense();
-		final Expense expense2 = new Expense();
-		final ArrayList<Expense> expenses = Lists.newArrayList(expense1, expense2);
-
-		when(service.findAll()).thenReturn(expenses);
-
-		// When
-		final ResultActions result = mvc.perform(get("/api/expense").accept(MediaType.APPLICATION_JSON));
-
-		// Then
-		result.andExpect(status().isOk())
-				.andExpect(content().string(toJson(expenses)));
-		verify(service).findAll();
 	}
 
 	@Test
@@ -141,7 +147,8 @@ public class ExpenseControllerTest {
 		when(service.delete(isA(Long.class))).thenReturn(true);
 
 		// When
-		final ResultActions result = mvc.perform(delete("/api/expense/1")
+		final String url = String.format("%s/%s", API_EXPENSE, id);
+		final ResultActions result = mvc.perform(delete(url)
 				.accept(MediaType.APPLICATION_JSON));
 
 		// Then

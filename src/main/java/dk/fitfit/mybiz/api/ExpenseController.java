@@ -18,19 +18,19 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService service;
 
-	@RequestMapping("/expense")
+	@RequestMapping("/expenses")
 	public Iterable<Expense> findAll() {
 		log.info("findAll()");
 		return service.findAll();
 	}
 
-	@RequestMapping(value = "/expense", method = RequestMethod.POST)
+	@RequestMapping(value = "/expenses", method = RequestMethod.POST)
 	public Expense save(@RequestBody Expense expense) {
 		log.info("save({})", expense.toString());
 		return service.save(expense);
 	}
 
-	@RequestMapping("/expense/{id}")
+	@RequestMapping("/expenses/{id}")
 	public ResponseEntity<?> findOne(@PathVariable long id) {
 		log.info("findOne({})", id);
 		final Expense expense = service.findOne(id);
@@ -41,14 +41,14 @@ public class ExpenseController {
 		}
 	}
 
-	@RequestMapping(value = "/expense/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/expenses/{id}", method = RequestMethod.PUT)
 	public Expense update(@RequestBody Expense expense, @PathVariable long id) {
 		log.info("update({})", expense.toString());
 		expense.setId(id);
 		return service.save(expense);
 	}
 
-	@RequestMapping(value = "/expense/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/expenses/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> delete(@PathVariable long id) {
 		log.info("delete({})", id);
 		if(service.delete(id)) {
@@ -58,7 +58,7 @@ public class ExpenseController {
 		}
 	}
 
-	@RequestMapping(value = "/expense/quarter/{q}")
+	@RequestMapping(value = "/expenses/quarter/{q}")
 	public double totalByQuarter(@PathVariable int q) {
 		log.info("totalByQuarter({})", q);
 		return service.totalPrice(q);
