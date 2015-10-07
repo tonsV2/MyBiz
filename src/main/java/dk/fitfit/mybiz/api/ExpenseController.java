@@ -63,4 +63,10 @@ public class ExpenseController {
 		log.info("totalByQuarter({})", q);
 		return service.totalPrice(q);
 	}
+
+	@RequestMapping(value = "/expense/year/{year}/quarter/{quarter}")
+	public double totalByQuarter(@PathVariable int year, @PathVariable int quarter) {
+		log.info("totalByQuarter({}, {})", year, quarter);
+		return service.totalPrice(year, quarter);
+	}
 }

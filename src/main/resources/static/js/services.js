@@ -10,8 +10,7 @@
 		});
 	});
 
-	app.factory('ExpenseTotal', function($resource) {
-		return $resource('api/expense/quarter/:q', { q: '@q' });
-	});
-
+//	app.factory('ExpenseTotal', function($resource) {
+//		return $resource('api/expense/quarter/:q', { q: '@q' });
+//	});
 })(angular);

@@ -47,27 +47,33 @@ public class ExpenseService {
 
 	public double totalPrice(final int quarter) {
 		log.info("totalPrice({})", quarter);
-		final PairOfDates dates = quarter2dates(quarter);
+		final int year = LocalDate.now().getYear();
+		return totalPrice(year, quarter);
+	}
+
+	public double totalPrice(final int year, final int quarter) {
+		log.info("totalPrice({}, {})", year, quarter);
+		final PairOfDates dates = quarter2dates(year, quarter);
 		return totalPrice(dates.getFirst(), dates.getSecond(), Expense::getTotalPrice);
 	}
 
-	private PairOfDates quarter2dates(final int quarter) {
+	private PairOfDates quarter2dates(final int year, final int quarter) {
 		switch (quarter) {
 			case 1:
-				final LocalDate firstOfJanuar = LocalDate.of(2015, 1, 1);
-				final LocalDate lastOfMarch = LocalDate.of(2015, 3, 31);
+				final LocalDate firstOfJanuar = LocalDate.of(year, 1, 1);
+				final LocalDate lastOfMarch = LocalDate.of(year, 3, 31);
 				return new PairOfDates(firstOfJanuar, lastOfMarch);
 			case 2:
-				final LocalDate firstOfApril = LocalDate.of(2015, 4, 1);
-				final LocalDate lastOfJune = LocalDate.of(2015, 6, 30);
+				final LocalDate firstOfApril = LocalDate.of(year, 4, 1);
+				final LocalDate lastOfJune = LocalDate.of(year, 6, 30);
 				return new PairOfDates(firstOfApril, lastOfJune);
 			case 3:
-				final LocalDate firstOfJuly = LocalDate.of(2015, 7, 1);
-				final LocalDate lastOfSeptember = LocalDate.of(2015, 9, 30);
+				final LocalDate firstOfJuly = LocalDate.of(year, 7, 1);
+				final LocalDate lastOfSeptember = LocalDate.of(year, 9, 30);
 				return new PairOfDates(firstOfJuly, lastOfSeptember);
 			case 4:
-				final LocalDate firstOfOctober = LocalDate.of(2015, 10, 1);
-				final LocalDate lastOfDecember = LocalDate.of(2015, 12, 31);
+				final LocalDate firstOfOctober = LocalDate.of(year, 10, 1);
+				final LocalDate lastOfDecember = LocalDate.of(year, 12, 31);
 				return new PairOfDates(firstOfOctober, lastOfDecember);
 			default:
 				throw new IllegalArgumentException();

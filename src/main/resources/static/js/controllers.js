@@ -2,16 +2,46 @@
 	'use strict';
 	var app = angular.module('myApp.controllers', []);
 
-	app.controller('DashboardController', function($scope, ExpenseTotal) {
+//	app.controller('DashboardController', function($scope, ExpenseTotal) {
+	app.controller('DashboardController', function($scope, $http) {
+		$scope.options =  (function range(begin, length, step) {
+			var callback = function (_, i) {
+				return begin + step * i;
+			};
+			return Array.apply(null, new Array(length)).map(callback);
+		})(new Date().getFullYear(), 50, -1);
+
+		/*
+		function range(begin, length, step) {
+			var callback = function (_, i) {
+				return begin + step * i;
+			};
+			return Array.apply(null, new Array(length)).map(callback);
+		}
+		$scope.options = range(new Date().getFullYear(), 50, -1);
+*/
+		function getQuarter(today) {
+			today = today || new Date();
+			return Math.floor((today.getMonth() + 3) / 3);
+		}
+
+		$scope.setCurrentQuarter = function() {
+			var quarter = getQuarter();
+			console.log("Quarter: %s", quarter);
+			$scope.selectedQuarter = quarter - 1;
+			return quarter;
+		};
+
 		$scope.updateTotalExpenses = function() {
-			ExpenseTotal.get({ q: $scope.selectedItem }).$promise.then(function(result) {
+//			$scope.totalExpenses = ExpenseTotal.get({ q: $scope.selectedQuarter });
+			$scope.selectedYear = $scope.selectedYear || new Date().getFullYear();
+			$scope.selectedQuarter = $scope.selectedQuarter || getQuarter();
+			var url = 'api/expense/year/' + $scope.selectedYear + '/quarter/' + $scope.selectedQuarter;
+			console.log("url: %s", url);
+			$http.get(url).success(function(result) {
+				console.log("result: %s", result);
 				$scope.totalExpenses = result;
-				console.log(result);
 			});
-//			ExpenseTotal.get({ q: $scope.selectedItem }, function(total) {
-//				$scope.totalExpenses = total;
-//			});
-//			$scope.totalExpenses = ExpenseTotal.get({ q: $scope.selectedItem });
 		}
 	});
 
