@@ -1,32 +1,25 @@
 package dk.fitfit.mybiz.resources;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.entities.JsonDateDeserializer;
 import dk.fitfit.mybiz.entities.JsonDateSerializer;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ExpenseResource extends ResourceSupport {
-	@JsonInclude
-	private long id;
-	@JsonInclude
 	private String name;
-	@JsonInclude
 	private String description;
-	@JsonInclude
 	private double price;
-	@JsonInclude
 	private int amount = 1;
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private LocalDate date;
 
-	private ExpenseResource(final long id, final String name, final String description, final double price, final int amount, final LocalDate date) {
-		this.id = id;
+	private ExpenseResource(final String name, final String description, final double price, final int amount, final LocalDate date) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -35,26 +28,11 @@ public class ExpenseResource extends ResourceSupport {
 	}
 
 	public final static class Builder {
-		private long id;
 		private String name;
 		private String description;
 		private double price;
 		private int amount;
 		private LocalDate date;
-
-		public Builder from(final Expense expense) {
-			this.id = expense.getId();
-			this.name = expense.getName();
-			this.description = expense.getDescription();
-			this.price = expense.getPrice();
-			this.amount = expense.getAmount();
-			this.date = expense.getDate();
-			return this;
-		}
-		public Builder setId(final long id) {
-			this.id = id;
-			return this;
-		}
 
 		public Builder setName(final String name) {
 			this.name = name;
@@ -82,8 +60,7 @@ public class ExpenseResource extends ResourceSupport {
 		}
 
 		public ExpenseResource build() {
-			final ExpenseResource resource = new ExpenseResource(id, name, description, price, amount, date);
-			return resource;
+			return new ExpenseResource(name, description, price, amount, date);
 		}
 	}
 
@@ -105,5 +82,10 @@ public class ExpenseResource extends ResourceSupport {
 
 	public LocalDate getDate() {
 		return date;
+	}
+
+	@Override
+	public List<Link> getLinks() {
+		return super.getLinks();
 	}
 }

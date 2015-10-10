@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Expense extends MyEntity {
+public class Expense extends Identifiable {
 	@Id
 	@GeneratedValue
 	private long id;
@@ -39,7 +39,8 @@ public class Expense extends MyEntity {
 		this.date = date;
 	}
 
-	public long getId() {
+	@Override
+	public Long getId() {
 		return id;
 	}
 

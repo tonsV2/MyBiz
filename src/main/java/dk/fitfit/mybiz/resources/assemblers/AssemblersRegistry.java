@@ -1,7 +1,7 @@
 package dk.fitfit.mybiz.resources.assemblers;
 
 import com.google.common.collect.Maps;
-import dk.fitfit.mybiz.entities.MyEntity;
+import dk.fitfit.mybiz.entities.Identifiable;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ResourceSupport;
@@ -20,7 +20,7 @@ public class AssemblersRegistry implements InitializingBean {
 //	@Autowired
 //	private List<AbstractLinksAssembler> assemblers;
 
-	private Map<Class<? extends MyEntity>, AbstractAssembler> classToAssemblerMap;
+	private Map<Class<? extends Identifiable>, AbstractAssembler> classToAssemblerMap;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -29,16 +29,16 @@ public class AssemblersRegistry implements InitializingBean {
 		});
 	}
 
-	public ResourceSupport getAssembledResource(MyEntity entity) {
+	public ResourceSupport getAssembledResource(Identifiable entity) {
 		final AbstractAssembler abstractAssembler = getAssembler(entity.getClass());
 		return abstractAssembler.toResource(entity);
 	}
 
-	public AbstractAssembler getAssembler(Class<? extends MyEntity> clazz) {
+	public AbstractAssembler getAssembler(Class<? extends Identifiable> clazz) {
 		return classToAssemblerMap.get(clazz);
 	}
 
-//	public Set<Class<? extends MyEntity>> getSupportedClasses() {
+//	public Set<Class<? extends Identifiable>> getSupportedClasses() {
 //		return classToAssemblerMap.keySet();
 //	}
 }

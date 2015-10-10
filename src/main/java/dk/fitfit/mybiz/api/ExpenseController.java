@@ -28,14 +28,18 @@ public class ExpenseController {
 	@RequestMapping("/v2/expenses/{id}")
 	public ResponseEntity<?> findOnev2(@PathVariable long id) throws Exception {
 		log.info("findOnev2({})", id);
+		// TODO: don't call afterPropertiesSet here
 		assemblersRegistry.afterPropertiesSet();
 		final Expense expense = service.findOne(id);
+		if(expense == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 //		final AbstractAssembler assembler = assemblersRegistry.getAssembler(expense.getClass());
 //		final ResourceSupport resource = assemblers.toResource(expense);
 		final ResourceSupport resource = assemblersRegistry.getAssembledResource(expense);
 		if(resource != null) {
 			System.out.println(resource.getClass());
-			return new ResponseEntity<>(expense, HttpStatus.OK);
+			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
