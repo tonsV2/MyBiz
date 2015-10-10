@@ -12,17 +12,15 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
 public class ExpenseResourceAssembler extends AbstractAssembler<ExpenseResource, Expense> {
+	@Override
 	public ExpenseResource toResource(final Expense expense) {
 		final ExpenseResource resource = new ExpenseResource();
 		resource.from(expense);
-		addLinks(resource, expense);
-		return resource;
-	}
 
-	private void addLinks(final ExpenseResource resource, final Expense expense) {
-		// TODO: A links assembler should be implemented
 		final Link link = linkTo(methodOn(ExpenseController.class).findOne(expense.getId())).withSelfRel();
 		resource.add(link);
+
+		return resource;
 	}
 
 	@Override

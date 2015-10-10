@@ -14,6 +14,7 @@ import java.util.Map;
 @Component
 public class Assembler implements InitializingBean {
 
+	// TODO: Does it scale? Does it perform?
 	@Autowired
 	private List<AbstractAssembler> assemblers;
 
