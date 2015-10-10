@@ -2,7 +2,7 @@ package dk.fitfit.mybiz.api;
 
 import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.resources.ExpenseResource;
-import dk.fitfit.mybiz.resources.assemblers.AssemblersRegistry;
+import dk.fitfit.mybiz.resources.assemblers.Assembler;
 import dk.fitfit.mybiz.resources.assemblers.ExpenseResourceAssembler;
 import dk.fitfit.mybiz.services.ExpenseService;
 import org.slf4j.Logger;
@@ -23,22 +23,17 @@ public class ExpenseController {
 	private ExpenseService service;
 
 	@Autowired
-	AssemblersRegistry assemblersRegistry;
+	Assembler assembler;
 
 	@RequestMapping("/v2/expenses/{id}")
 	public ResponseEntity<?> findOnev2(@PathVariable long id) throws Exception {
 		log.info("findOnev2({})", id);
-		// TODO: don't call afterPropertiesSet here
-		assemblersRegistry.afterPropertiesSet();
 		final Expense expense = service.findOne(id);
 		if(expense == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-//		final AbstractAssembler assembler = assemblersRegistry.getAssembler(expense.getClass());
-//		final ResourceSupport resource = assemblers.toResource(expense);
-		final ResourceSupport resource = assemblersRegistry.getAssembledResource(expense);
+		final ResourceSupport resource = assembler.getAssembledResource(expense);
 		if(resource != null) {
-			System.out.println(resource.getClass());
 			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

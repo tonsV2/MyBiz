@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 @Component
-public class AssemblersRegistry implements InitializingBean {
+public class Assembler implements InitializingBean {
 
 	@Autowired
 	private List<AbstractAssembler> assemblers;
