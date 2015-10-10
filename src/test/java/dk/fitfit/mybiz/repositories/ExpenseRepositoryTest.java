@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Iterator;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,8 +25,8 @@ public class ExpenseRepositoryTest {
 
 	@Before
 	public void setUp() {
-		final Expense expense = new Expense();
-		repository.save(expense);
+//		final Expense expense = new Expense();
+//		repository.save(expense);
 	}
 
 	@Test
@@ -54,6 +56,7 @@ public class ExpenseRepositoryTest {
 	@Test
 	public void findOne() {
 		// Given
+		save();
 		final long id = 1L;
 
 		// When
@@ -62,15 +65,36 @@ public class ExpenseRepositoryTest {
 		// Then
 		assertThat(expense, notNullValue());
 		assertThat(expense.getId(), notNullValue());
+
+		// TODO: fix test
+		fail();
 	}
 
 	@Test
 	public void findAll() {
+		save();
+		save();
+
+		final Iterable<Expense> all = repository.findAll();
+		final Iterator<Expense> iterator = all.iterator();
+		final Expense expense = iterator.next();
+		System.out.println(expense.getName());
+		final Expense expense1 = iterator.next();
+		System.out.println(expense1.getName());
+
+		// TODO: fix test
 		fail();
 	}
 
 	@Test
 	public void delete() {
+		// Given
+		save();
+		final Expense expense = repository.findAll().iterator().next();
+		final Long id = expense.getId();
+		repository.delete(id);
+
+		// TODO: fix test
 		fail();
 	}
 

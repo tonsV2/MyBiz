@@ -22,10 +22,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -77,7 +78,12 @@ public class ExpenseControllerTest {
 
 		// Then
 		result.andExpect(status().isOk())
-				.andExpect(content().string(toJson(expense)));
+//				.andExpect(content().string(toJson(expense)));
+				.andDo(print())
+				.andExpect(jsonPath("$.amount", is(1)))
+				.andExpect(jsonPath("$.totalPrice", is(0.0)))
+				.andExpect(jsonPath("$.links[0].rel", is("self")));
+//				.andExpect(jsonPath("$[0].links[0].href", endsWith("/")));
 		verify(service).findOne(anyLong());
 	}
 
@@ -85,9 +91,14 @@ public class ExpenseControllerTest {
 	public void getExpenses() throws Exception {
 		// Given
 		final Expense expense1 = new Expense();
+		expense1.setName("expense1");
+
 		final Expense expense2 = new Expense();
+		expense2.setName("expense2");
+
 		final ArrayList<Expense> expenses = Lists.newArrayList(expense1, expense2);
 
+		// TODO: When should actually be under given... right? Structure tests better
 		when(service.findAll()).thenReturn(expenses);
 
 		// When
@@ -95,7 +106,9 @@ public class ExpenseControllerTest {
 
 		// Then
 		result.andExpect(status().isOk())
-				.andExpect(content().string(toJson(expenses)));
+//				.andExpect(content().string(toJson(expenses)));
+				.andExpect(jsonPath("$[1].amount", is(1)))
+				.andDo(print());
 		verify(service).findAll();
 	}
 
