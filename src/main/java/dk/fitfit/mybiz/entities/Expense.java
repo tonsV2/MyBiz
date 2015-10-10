@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Expense extends Identifiable {
+public class Expense implements Identifiable {
 	@Id
 	@GeneratedValue
 	private long id;
@@ -68,6 +68,12 @@ public class Expense extends Identifiable {
 		return price;
 	}
 
+	// TODO: Without these methods getTotalPrice and getTotalPriceIncludingVat can't be invoked by reflection
+	public void setTotalPrice(final double totalPrice) {
+	}
+	// TODO: Even the argument is required... getTotalPriceIncludingVat wont print as of now
+	public void setTotalPriceIncludingVat() {
+	}
 	public double getTotalPrice() {
 		return price * amount;
 	}

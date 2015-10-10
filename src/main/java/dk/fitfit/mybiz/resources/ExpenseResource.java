@@ -1,87 +1,65 @@
 package dk.fitfit.mybiz.resources;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dk.fitfit.mybiz.entities.utils.JsonDateDeserializer;
-import dk.fitfit.mybiz.entities.utils.JsonDateSerializer;
+import com.google.common.collect.Lists;
+import dk.fitfit.mybiz.entities.Identifiable;
+import dk.fitfit.mybiz.entities.utils.JsonResourceSerializer;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
-import java.time.LocalDate;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@JsonSerialize(using = JsonResourceSerializer.class)
 public class ExpenseResource extends ResourceSupport {
-	private String name;
-	private String description;
-	private double price;
-	private int amount = 1;
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	@JsonSerialize(using = JsonDateSerializer.class)
-	private LocalDate date;
+	private final Map<String, Object> properties = new HashMap<>();
 
-	private ExpenseResource(final String name, final String description, final double price, final int amount, final LocalDate date) {
-		this.name = name;
-		this.description = description;
-		this.price = price;
-		this.amount = amount;
-		this.date = date;
+	// TODO: Everything below this is boilerplate... it's annoying to add a property!
+	// What if this class could return a map and then in the ExpenseResourceAssembler you could use the keys of that properties to pick from the entity?
+	// Write a JsonSerializer for AbstractResourceSomething
+
+	public ExpenseResource() {
 	}
 
-	public final static class Builder {
-		private String name;
-		private String description;
-		private double price;
-		private int amount;
-		private LocalDate date;
-
-		public Builder setName(final String name) {
-			this.name = name;
-			return this;
-		}
-
-		public Builder setDescription(final String description) {
-			this.description = description;
-			return this;
-		}
-
-		public Builder setPrice(final double price) {
-			this.price = price;
-			return this;
-		}
-
-		public Builder setAmount(final int amount) {
-			this.amount = amount;
-			return this;
-		}
-
-		public Builder setDate(final LocalDate date) {
-			this.date = date;
-			return this;
-		}
-
-		public ExpenseResource build() {
-			return new ExpenseResource(name, description, price, amount, date);
-		}
+	public Object addProperty(final String key, final Object value) {
+		return properties.put(key, value);
 	}
 
-	public String getName() {
-		return name;
+	public Map<String, Object> getProperties() {
+		properties.put("links", getLinks());
+		return properties;
 	}
 
-	public String getDescription() {
-		return description;
+	public List<String> propertyKeys() {
+		return Lists.newArrayList("name",
+				"description",
+				"price",
+				"amount",
+				"date",
+				"totalPrice",
+				"totalPriceIncludingVat");
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public int getAmount() {
-		return amount;
-	}
-
-	public LocalDate getDate() {
-		return date;
+	public boolean from(final Identifiable expense) {
+		// TODO: Does it scale? Does it perform?
+		final List<String> keySet = propertyKeys();
+		boolean success = true;
+		for (final String key : keySet) {
+			try {
+				final Object value = new PropertyDescriptor(key, expense.getClass()).getReadMethod().invoke(expense);
+				addProperty(key, value);
+				success = true;
+			} catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
+				success = false;
+				System.out.println("No: " + key);
+//				e.printStackTrace();
+			}
+		}
+		return success;
 	}
 
 	@Override

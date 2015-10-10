@@ -13,13 +13,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @Component
 public class ExpenseResourceAssembler extends AbstractAssembler<ExpenseResource, Expense> {
 	public ExpenseResource toResource(final Expense expense) {
-		final ExpenseResource.Builder builder = new ExpenseResource.Builder();
-		builder.setName(expense.getName())
-				.setDescription(expense.getDescription())
-				.setPrice(expense.getPrice())
-				.setAmount(expense.getAmount())
-				.setDate(expense.getDate());
-		final ExpenseResource resource = builder.build();
+		final ExpenseResource resource = new ExpenseResource();
+		resource.from(expense);
 		addLinks(resource, expense);
 		return resource;
 	}

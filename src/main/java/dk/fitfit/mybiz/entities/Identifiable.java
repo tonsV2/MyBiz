@@ -1,4 +1,4 @@
 package dk.fitfit.mybiz.entities;
 
-public abstract class Identifiable implements org.springframework.hateoas.Identifiable<Long> {
+public abstract interface Identifiable extends org.springframework.hateoas.Identifiable<Long> {
 }
