@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Expense {
+public class Expense extends MyEntity {
 	@Id
 	@GeneratedValue
 	private long id;

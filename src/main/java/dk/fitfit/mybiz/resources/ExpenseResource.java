@@ -1,4 +1,4 @@
-package dk.fitfit.mybiz.resource;
+package dk.fitfit.mybiz.resources;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -25,7 +25,7 @@ public class ExpenseResource extends ResourceSupport {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	private LocalDate date;
 
-	public ExpenseResource(final long id, final String name, final String description, final double price, final int amount, final LocalDate date) {
+	private ExpenseResource(final long id, final String name, final String description, final double price, final int amount, final LocalDate date) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
