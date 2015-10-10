@@ -17,6 +17,7 @@ public class Assembler implements InitializingBean {
 	@Autowired
 	private List<AbstractAssembler> assemblers;
 
+// TODO: implement something similar for other kinds of assemblers
 //	@Autowired
 //	private List<AbstractLinksAssembler> assemblers;
 
@@ -29,7 +30,7 @@ public class Assembler implements InitializingBean {
 		});
 	}
 
-	public ResourceSupport getAssembledResource(Identifiable entity) {
+	public ResourceSupport getAssembledResource(final Identifiable entity) {
 		final AbstractAssembler abstractAssembler = getAssembler(entity.getClass());
 		return abstractAssembler.toResource(entity);
 	}
