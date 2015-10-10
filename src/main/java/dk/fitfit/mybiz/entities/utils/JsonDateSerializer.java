@@ -1,4 +1,4 @@
-package dk.fitfit.mybiz.entities;
+package dk.fitfit.mybiz.entities.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

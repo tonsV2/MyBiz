@@ -2,8 +2,8 @@ package dk.fitfit.mybiz.resources;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dk.fitfit.mybiz.entities.JsonDateDeserializer;
-import dk.fitfit.mybiz.entities.JsonDateSerializer;
+import dk.fitfit.mybiz.entities.utils.JsonDateDeserializer;
+import dk.fitfit.mybiz.entities.utils.JsonDateSerializer;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
