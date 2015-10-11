@@ -8,6 +8,7 @@ import java.util.List;
 // TODO: Set access rights here?
 public class ExpenseResource extends PowerResource {
 	public ExpenseResource() {
+		// TODO: add links here or in the ResourceAssembler
 		add(new Link("snot", "snog"));
 	}
 

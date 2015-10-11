@@ -17,6 +17,7 @@ public class ExpenseResourceAssembler extends AbstractAssembler<ExpenseResource,
 		final ExpenseResource resource = new ExpenseResource();
 		resource.from(expense);
 
+		// TODO: add links here or on the resource itself
 		final Link link = linkTo(methodOn(ExpenseController.class).findOne(expense.getId())).withSelfRel();
 		resource.add(link);
 

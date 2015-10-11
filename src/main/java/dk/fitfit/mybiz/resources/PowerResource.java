@@ -27,14 +27,14 @@ public abstract class PowerResource extends ResourceSupport {
 		return properties;
 	}
 
-	public boolean from(final Identifiable expense) {
+	public boolean from(final Identifiable entity) {
 		// TODO: set properties.size if < keySet.length?
 		final List<String> keySet = propertyKeys();
 		boolean success = false;
 		for (final String key : keySet) {
 			try {
 				// TODO: Does it scale? Does it perform? Can it be optimized?
-				final Object value = new PropertyDescriptor(key, expense.getClass()).getReadMethod().invoke(expense);
+				final Object value = new PropertyDescriptor(key, entity.getClass()).getReadMethod().invoke(entity);
 				addProperty(key, value);
 				success = true;
 			} catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
