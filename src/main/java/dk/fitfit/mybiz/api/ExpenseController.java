@@ -1,9 +1,10 @@
 package dk.fitfit.mybiz.api;
 
+import com.google.common.collect.Lists;
 import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.resources.ExpenseResource;
-import dk.fitfit.mybiz.resources.assemblers.Assembler;
 import dk.fitfit.mybiz.resources.assemblers.ExpenseResourceAssembler;
+import dk.fitfit.mybiz.resources.assemblers.ResourceAssembler;
 import dk.fitfit.mybiz.services.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,8 @@ import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -23,7 +26,7 @@ public class ExpenseController {
 	private ExpenseService service;
 
 	@Autowired
-	Assembler assembler;
+	ResourceAssembler resourceAssembler;
 
 	@RequestMapping("/v2/expenses/{id}")
 	public ResponseEntity<?> findOnev2(@PathVariable long id) throws Exception {
@@ -32,7 +35,7 @@ public class ExpenseController {
 		if(expense == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		final ResourceSupport resource = assembler.getAssembledResource(expense);
+		final ResourceSupport resource = resourceAssembler.getAssembledResource(expense);
 		if(resource != null) {
 			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} else {
@@ -47,6 +50,22 @@ public class ExpenseController {
 		if(expense != null) {
 			final ExpenseResourceAssembler resourceAssembler = new ExpenseResourceAssembler();
 			final ExpenseResource resource = resourceAssembler.toResource(expense);
+			return new ResponseEntity<>(resource, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@RequestMapping("/v2/expenses")
+	public ResponseEntity<?> findAllv2() {
+		log.info("findAllv2()");
+		final Iterable<Expense> iterable = service.findAll();
+		final List<Expense> expenses = Lists.newArrayList(iterable);
+		if(expenses.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		final List<ResourceSupport> resource = resourceAssembler.getAssembledResources(expenses);
+		if(resource != null) {
 			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

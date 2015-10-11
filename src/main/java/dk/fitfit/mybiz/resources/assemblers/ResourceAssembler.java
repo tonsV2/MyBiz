@@ -1,6 +1,8 @@
 package dk.fitfit.mybiz.resources.assemblers;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import dk.fitfit.mybiz.entities.Expense;
 import dk.fitfit.mybiz.entities.Identifiable;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import java.util.Map;
 
 
 @Component
-public class Assembler implements InitializingBean {
+public class ResourceAssembler implements InitializingBean {
 
 	// TODO: Does it scale? Does it perform?
 	@Autowired
@@ -24,18 +26,26 @@ public class Assembler implements InitializingBean {
 	private Map<Class<? extends Identifiable>, AbstractAssembler> classToAssemblerMap;
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void afterPropertiesSet() throws Exception {
 		classToAssemblerMap = Maps.uniqueIndex(assemblers, abstractAssembler -> {
 			return abstractAssembler.getSupportedClass();
 		});
 	}
 
+	// TODO: unchecked?
+	@SuppressWarnings("unchecked")
 	public ResourceSupport getAssembledResource(Identifiable entity) {
 		final AbstractAssembler abstractAssembler = getAssembler(entity.getClass());
 		return abstractAssembler.toResource(entity);
 	}
 
-	public AbstractAssembler getAssembler(Class<? extends Identifiable> clazz) {
+	// TODO: don't depend on Expense
+	public List<ResourceSupport> getAssembledResources(final List<Expense> expenses) {
+		return Lists.transform(expenses, this::getAssembledResource);
+	}
+
+	private AbstractAssembler getAssembler(Class<? extends Identifiable> clazz) {
 		return classToAssemblerMap.get(clazz);
 	}
 
