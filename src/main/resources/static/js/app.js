@@ -17,7 +17,7 @@
 
 		$stateProvider.state('expenses', { // state for showing all expenses
 			url: '/expenses',
-			templateUrl: 'partials/expense/expenses.html',
+			templateUrl: 'partials/expense/expense-list.html',
 			controller: 'ExpenseListController'
 		}).state('viewExpense', { //state for showing single expense
 			url: '/expenses/:id/view',
